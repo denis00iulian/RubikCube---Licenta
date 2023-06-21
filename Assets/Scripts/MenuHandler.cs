@@ -7,6 +7,7 @@ public class MenuHandler : MonoBehaviour
     public GameObject cube;
     public GameObject canvas;
     public GameObject helpCanvas;
+
     public GameObject whiteCrossCanvas_1;
     public GameObject cubeWhiteCross_1;
     public GameObject whiteCrossCanvas_2;
@@ -15,12 +16,24 @@ public class MenuHandler : MonoBehaviour
     public GameObject cubeWhiteCross_3;
     public GameObject whiteCrossCanvas_4;
     public GameObject cubeWhiteCross_4;
+
+    public GameObject whiteCornersCanvas_1;
+    public GameObject cubeWhiteCorners_1;
+    public GameObject whiteCornersCanvas_2;
+    public GameObject cubeWhiteCorners_2;
+    public GameObject whiteCornersCanvas_3;
+    public GameObject cubeWhiteCorners_3;
+    public GameObject whiteCornersCanvas_4;
+    public GameObject cubeWhiteCorners_4;
+
     public List<GameObject> list = new();
+
     // Start is called before the first frame update
     void Start()
     {
-        list = new() { cube, canvas, helpCanvas, whiteCrossCanvas_1, cubeWhiteCross_1, whiteCrossCanvas_2, cubeWhiteCross_2,
-        whiteCrossCanvas_3, cubeWhiteCross_3, whiteCrossCanvas_4, cubeWhiteCross_4
+        list = new() { cube, canvas, helpCanvas, 
+            whiteCrossCanvas_1, cubeWhiteCross_1, whiteCrossCanvas_2, cubeWhiteCross_2, whiteCrossCanvas_3, cubeWhiteCross_3, whiteCrossCanvas_4, cubeWhiteCross_4,
+            whiteCornersCanvas_1, whiteCornersCanvas_2, whiteCornersCanvas_3, whiteCornersCanvas_4, cubeWhiteCorners_1, cubeWhiteCorners_2, cubeWhiteCorners_3, cubeWhiteCorners_4
         };
     }
 
@@ -101,6 +114,48 @@ public class MenuHandler : MonoBehaviour
         }
         whiteCrossCanvas_4.SetActive(true);
         cubeWhiteCross_4.SetActive(true);
+        ResetCamera();
+    }
+
+    public void ShowWhiteCorners_1_Canvas()
+    {
+        foreach (var item in list)
+        {
+            item.SetActive(false);
+        }
+        whiteCornersCanvas_1.SetActive(true);
+        cubeWhiteCorners_1.SetActive(true);
+        ResetCamera();
+    }
+    public void ShowWhiteCorners_2_Canvas()
+    {
+        foreach (var item in list)
+        {
+            item.SetActive(false);
+        }
+        whiteCornersCanvas_2.SetActive(true);
+        cubeWhiteCorners_2.SetActive(true);
+        ResetCamera();
+    }
+    public void ShowWhiteCorners_3_Canvas()
+    {
+        foreach (var item in list)
+        {
+            item.SetActive(false);
+        }
+        whiteCornersCanvas_3.SetActive(true);
+        cubeWhiteCorners_3.SetActive(true);
+        ResetCamera();
+    }
+
+    public void ShowWhiteCorners_4_Canvas()
+    {
+        foreach (var item in list)
+        {
+            item.SetActive(false);
+        }
+        whiteCornersCanvas_4.SetActive(true);
+        cubeWhiteCorners_4.SetActive(true);
         ResetCamera();
     }
 

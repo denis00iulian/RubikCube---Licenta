@@ -44,18 +44,17 @@ public class WhiteCross : MonoBehaviour
     public IEnumerator NextFlippingEdgeMove()
     {
         string move = flippingEdgeMoves[flippingEdge_index];
-        print(move);
         yield return StartCoroutine(cubeMovement.PerformMove_Learning(GameObject.Find("L"), GameObject.Find("U"), move));
         flippingEdge_index++;
     }
 
     public void Click_PreviousFlippingEdgeMove()
     {
-        flippingEdge_index--;
-        if (!(flippingEdge_index > -1))
+        if (!(flippingEdge_index > 0))
         {
             return;
         }
+        flippingEdge_index--;
         StartCoroutine(PreviousFlippingEdgeMove());
     }
 
@@ -91,11 +90,11 @@ public class WhiteCross : MonoBehaviour
 
     public void Click_PreviousBottomLayerMove()
     {
-        bottomLayer_index--;
-        if (!(bottomLayer_index > -1))
+        if (!(bottomLayer_index > 0))
         {
             return;
         }
+        bottomLayer_index--;
         StartCoroutine(PreviousBottomLayerMove());
     }
 
@@ -131,11 +130,11 @@ public class WhiteCross : MonoBehaviour
 
     public void Click_PreviousMiddleLayerMove()
     {
-        middleLayer_index--;
-        if (!(middleLayer_index > -1))
+        if (!(middleLayer_index > 0))
         {
             return;
         }
+        middleLayer_index--;
         StartCoroutine(PreviousMiddleLayerMove());
     }
 
@@ -171,11 +170,11 @@ public class WhiteCross : MonoBehaviour
 
     public void Click_PreviousMirroredMiddleLayerMove()
     {
-        mirroredBottomLayer_index--;
-        if (!(mirroredBottomLayer_index > -1))
+        if (!(mirroredBottomLayer_index > 0))
         {
             return;
         }
+        mirroredBottomLayer_index--;
         StartCoroutine(PreviousMirroredMiddleLayerMove());
     }
 

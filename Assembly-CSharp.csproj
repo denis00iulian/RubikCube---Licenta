@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{33AFF5B6-3750-4E51-8E75-36292C3B15F7}</ProjectGuid>
+    <ProjectGuid>{EBC7DD92-C686-8513-0260-CEC92FF866E0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -56,14 +56,15 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\MenuHandler.cs" />
     <Compile Include="Assets\Scripts\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Solve.cs" />
+    <Compile Include="Assets\Scripts\Learning\WhiteCross.cs" />
     <Compile Include="Assets\Scripts\CubeState.cs" />
     <Compile Include="Assets\Scripts\CubeMap.cs" />
     <Compile Include="Assets\Scripts\CubeMovement.cs" />
     <Compile Include="Assets\Scripts\Learning.cs" />
-    <Compile Include="Assets\Scripts\MenuHandler.cs" />
-    <Compile Include="Assets\Scripts\Learning\WhiteCross.cs" />
+    <Compile Include="Assets\Scripts\Learning\WhiteCorners.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
