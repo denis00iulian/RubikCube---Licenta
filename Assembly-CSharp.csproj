@@ -58,13 +58,13 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\MenuHandler.cs" />
     <Compile Include="Assets\Scripts\CameraMovement.cs" />
+    <Compile Include="Assets\Scripts\Learning\WhiteCorners.cs" />
     <Compile Include="Assets\Scripts\Solve.cs" />
     <Compile Include="Assets\Scripts\Learning\WhiteCross.cs" />
     <Compile Include="Assets\Scripts\CubeState.cs" />
     <Compile Include="Assets\Scripts\CubeMap.cs" />
     <Compile Include="Assets\Scripts\CubeMovement.cs" />
     <Compile Include="Assets\Scripts\Learning.cs" />
-    <Compile Include="Assets\Scripts\Learning\WhiteCorners.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
