@@ -56,15 +56,19 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Learning\YellowCross.cs" />
+    <Compile Include="Assets\Scripts\Learning\FirstTwoLayers.cs" />
     <Compile Include="Assets\Scripts\MenuHandler.cs" />
+    <Compile Include="Assets\Scripts\Learning\PositionYellowCorners.cs" />
+    <Compile Include="Assets\Scripts\Learning\YellowEdges.cs" />
     <Compile Include="Assets\Scripts\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Learning\WhiteCorners.cs" />
+    <Compile Include="Assets\Scripts\Learning\OrientYellowCorners.cs" />
     <Compile Include="Assets\Scripts\Solve.cs" />
     <Compile Include="Assets\Scripts\Learning\WhiteCross.cs" />
     <Compile Include="Assets\Scripts\CubeState.cs" />
     <Compile Include="Assets\Scripts\CubeMap.cs" />
     <Compile Include="Assets\Scripts\CubeMovement.cs" />
-    <Compile Include="Assets\Scripts\Learning.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -19,9 +19,6 @@ public class CubeMovement : MonoBehaviour
     readonly Collider[] _subCubes = new Collider[9];
     readonly Vector3[] _originalPositions = new Vector3[9];
     readonly Quaternion[] _originalOrientations = new Quaternion[9];
-    readonly Collider[] _subCubes_learning = new Collider[9];
-    readonly Vector3[] _originalPositions_learning = new Vector3[9];
-    readonly Quaternion[] _originalOrientations_learning = new Quaternion[9];
 
     private CubeState cubeState;
 
@@ -159,6 +156,7 @@ public class CubeMovement : MonoBehaviour
         {
             (List<GameObject> newFace, List<GameObject> newUpperFace, string newMove) = GetNewParams(face, upperFace, move);
             yield return StartCoroutine(PerformMove(newFace, newUpperFace, newMove));
+            yield break;
         }
         // Step 4: Gather the 8-9 sub-cubes we need to rotate.
         (int sign, Vector3 rotationAxis) = GetRotationSpecs(face, move);
@@ -173,7 +171,7 @@ public class CubeMovement : MonoBehaviour
             _originalOrientations[i] = subCube.rotation;
         }
         float angle = 0.0f;
-        float snappedAngle = sign * 90.0f;//Mathf.Round(angle / 90.0f) * 90.0f;
+        float snappedAngle = sign * 90.0f;
 
         while (angle != snappedAngle)
         {
@@ -202,7 +200,7 @@ public class CubeMovement : MonoBehaviour
         if (move.Equals("L"))
             return (LeftNeighbourFace(face, upperFace), upperFace, "F");
         if (move.Equals("L2"))
-            return (LeftNeighbourFace(face, upperFace), face, "F2");
+            return (LeftNeighbourFace(face, upperFace), upperFace, "F2");
         if (move.Equals("L'"))
             return (LeftNeighbourFace(face, upperFace), upperFace, "F'");
         if (move.Equals("R"))
@@ -270,7 +268,7 @@ public class CubeMovement : MonoBehaviour
             int randomIndex = Random.Range(0, moves.Count); // change moves.count to movecount and i to randomindex
             string randomMove = moves[randomIndex];
 
-            yield return StartCoroutine(PerformMove(cubeState.front, cubeState.down, randomMove));
+            yield return StartCoroutine(PerformMove(cubeState.left, cubeState.down, randomMove));
         }
         moving = false;
     }
@@ -388,15 +386,15 @@ public class CubeMovement : MonoBehaviour
         }
     }
 
-    void RotateGroup_learning(float angle, Vector3 axis, int count)
+    void RotateGroup_Learning(float angle, Vector3 axis, int count)
     {
 
         Quaternion rotation = Quaternion.AngleAxis(angle, axis);
 
         for (int i = 0; i < count; i++)
         {
-            var subCube = _subCubes_learning[i].transform;
-            subCube.SetPositionAndRotation(rotation * _originalPositions_learning[i], rotation * _originalOrientations_learning[i]);
+            var subCube = _subCubes[i].transform;
+            subCube.SetPositionAndRotation(rotation * _originalPositions[i], rotation * _originalOrientations[i]);
         }
     }
 
@@ -404,33 +402,35 @@ public class CubeMovement : MonoBehaviour
     {
         if (!move.Equals("F") && !move.Equals("F'") && !move.Equals("F2"))
         {
-            (GameObject newFace, GameObject newUpperFace, string newMove) = GetNewParams(face, upperFace, move);
+            (GameObject newFace, GameObject newUpperFace, string newMove) = GetNewParams_Learning(face, upperFace, move);
             yield return StartCoroutine(PerformMove_Learning(newFace, newUpperFace, newMove));
+            yield break;
         }
         // Step 4: Gather the 8-9 sub-cubes we need to rotate.
-        (int sign, Vector3 rotationAxis) = GetRotationSpecs(face, move);
+        (int sign, Vector3 rotationAxis) = GetRotationSpecs_Learning(face, move);
         Vector3 extents = Vector3.one - 0.9f * rotationAxis;
         extents *= 2.0f;
-        int subCubeCount = Physics.OverlapBoxNonAlloc(face.transform.position, extents, _subCubes_learning, Quaternion.identity, layerMask);
+        int subCubeCount = Physics.OverlapBoxNonAlloc(face.transform.position, extents, _subCubes, Quaternion.identity, layerMask);
 
         for (int i = 0; i < subCubeCount; i++)
         {
-            var subCube = _subCubes_learning[i].transform;
-            _originalPositions_learning[i] = subCube.position;
-            _originalOrientations_learning[i] = subCube.rotation;
+            var subCube = _subCubes[i].transform;
+            _originalPositions[i] = subCube.position;
+            _originalOrientations[i] = subCube.rotation;
         }
         float angle = 0.0f;
-        float snappedAngle = sign * 90.0f;//Mathf.Round(angle / 90.0f) * 90.0f;
+        float snappedAngle = sign * 90.0f;
+
         while (angle != snappedAngle)
         {
             angle = Mathf.MoveTowards(angle, snappedAngle, snapSpeed * Time.deltaTime);
 
-            RotateGroup_learning(angle, rotationAxis, subCubeCount);
+            RotateGroup_Learning(angle, rotationAxis, subCubeCount);
             yield return null;
         }
     }
 
-    (GameObject, GameObject, string) GetNewParams(GameObject face, GameObject upperFace, string move)
+    (GameObject, GameObject, string) GetNewParams_Learning(GameObject face, GameObject upperFace, string move)
     {
         if (move.Equals("U"))
             return (upperFace, face, "F'");
@@ -439,39 +439,39 @@ public class CubeMovement : MonoBehaviour
         if (move.Equals("U'"))
             return (upperFace, face, "F");
         if (move.Equals("D"))
-            return (OppositeFace(upperFace), face, "F'");
+            return (OppositeFace_Learning(upperFace), face, "F'");
         if (move.Equals("D2"))
-            return (OppositeFace(upperFace), face, "F2");
+            return (OppositeFace_Learning(upperFace), face, "F2");
         if (move.Equals("D'"))
-            return (OppositeFace(upperFace), face, "F");
+            return (OppositeFace_Learning(upperFace), face, "F");
         if (move.Equals("L"))
-            return (LeftNeighbourFace(face, upperFace), upperFace, "F");
+            return (LeftNeighbourFace_Learning(face, upperFace), upperFace, "F");
         if (move.Equals("L2"))
-            return (LeftNeighbourFace(face, upperFace), face, "F2");
+            return (LeftNeighbourFace_Learning(face, upperFace), upperFace, "F2");
         if (move.Equals("L'"))
-            return (LeftNeighbourFace(face, upperFace), upperFace, "F'");
+            return (LeftNeighbourFace_Learning(face, upperFace), upperFace, "F'");
         if (move.Equals("R"))
-            return (RightNeighbourFace(face, upperFace), upperFace, "F");
+            return (RightNeighbourFace_Learning(face, upperFace), upperFace, "F");
         if (move.Equals("R2"))
-            return (RightNeighbourFace(face, upperFace), upperFace, "F2");
+            return (RightNeighbourFace_Learning(face, upperFace), upperFace, "F2");
         if (move.Equals("R'"))
-            return (RightNeighbourFace(face, upperFace), upperFace, "F'");
+            return (RightNeighbourFace_Learning(face, upperFace), upperFace, "F'");
         return (null, null, null);
     }
 
-    (int, Vector3) GetRotationSpecs(GameObject face, string move)
+    (int, Vector3) GetRotationSpecs_Learning(GameObject face, string move)
     {
         if (move.Equals("F"))
-            return (GetDirection(face) * -1, GetRotationVector(face));
+            return (GetDirection_Learning(face) * -1, GetRotationVector_Learning(face));
         if (move.Equals("F2"))
-            return (GetDirection(face) * -2, GetRotationVector(face));
+            return (GetDirection_Learning(face) * -2, GetRotationVector_Learning(face));
         if (move.Equals("F'"))
-            return (GetDirection(face) * 1, GetRotationVector(face));
+            return (GetDirection_Learning(face) * 1, GetRotationVector_Learning(face));
 
         return (0, Vector3.zero);
     }
 
-    Vector3 GetRotationVector(GameObject face)
+    Vector3 GetRotationVector_Learning(GameObject face)
     {
         if (face.name.Equals("U") || face.name.Equals("D"))
         {
@@ -488,7 +488,7 @@ public class CubeMovement : MonoBehaviour
         return Vector3.zero;
     }
 
-    int GetDirection(GameObject face)
+    int GetDirection_Learning(GameObject face)
     {
         if (face.name.Equals("U") || face.name.Equals("F") || face.name.Equals("L"))
         {
@@ -500,61 +500,103 @@ public class CubeMovement : MonoBehaviour
         }
     }
 
-    public GameObject OppositeFace(GameObject targetFace)
+    public GameObject OppositeFace_Learning(GameObject targetFace)
     {
         string name = targetFace.name;
-        if (name.Equals("F"))
+        if (name == "F")
             return GameObject.Find("B");
-        if (name.Equals("B"))
+        if (name == "B")
             return GameObject.Find("F");
-        if (name.Equals("L"))
+        if (name == "L")
             return GameObject.Find("R");
-        if (name.Equals("R"))
+        if (name == "R")
             return GameObject.Find("L");
-        if (name.Equals("U"))
+        if (name == "U")
             return GameObject.Find("D");
-        return GameObject.Find("U");
+        if (name == "D")
+            return GameObject.Find("U");
+        return null;
     }
-    public GameObject LeftNeighbourFace(GameObject targetFace, GameObject upperFace)
+    public GameObject LeftNeighbourFace_Learning(GameObject targetFace, GameObject upperFace)
     {
         string faceName = targetFace.name;
         string upperFaceName = upperFace.name;
-        if (faceName.Equals("F")) //verde
+        if (faceName == "F") //verde
         {
-            if (upperFaceName.Equals("U"))
+            if (upperFaceName == "U")
                 return GameObject.Find("L");
-            if (upperFaceName.Equals("D"))
+            if (upperFaceName == "R")
+                return GameObject.Find("U");
+            if (upperFaceName == "D")
                 return GameObject.Find("R");
+            if (upperFaceName == "L")
+                return GameObject.Find("D");
         }
 
-        if (faceName.Equals("L")) //portocaliu
+        if (faceName == "L") //portocaliu
         {
-            if (upperFaceName.Equals("U"))
+            if (upperFaceName == "U")
                 return GameObject.Find("B");
-            if (upperFaceName.Equals("D"))
+            if (upperFaceName == "F")
+                return GameObject.Find("U");
+            if (upperFaceName == "D")
                 return GameObject.Find("F");
+            if (upperFaceName == "B")
+                return GameObject.Find("D");
         }
 
-        if (faceName.Equals("B")) //albastru
+        if (faceName == "B") //albastru
         {
-            if (upperFaceName.Equals("U"))
+            if (upperFaceName == "U")
                 return GameObject.Find("R");
-            if (upperFaceName.Equals("D"))
+            if (upperFaceName == "R")
+                return GameObject.Find("D");
+            if (upperFaceName == "D")
                 return GameObject.Find("L");
+            if (upperFaceName == "L")
+                return GameObject.Find("U");
         }
 
-        if (faceName.Equals("R")) //Rosu
+        if (faceName == "R") //Rosu
         {
-            if (upperFaceName.Equals("U"))
+            if (upperFaceName == "U")
                 return GameObject.Find("F");
-            if (upperFaceName.Equals("D"))
+            if (upperFaceName == "F")
+                return GameObject.Find("D");
+            if (upperFaceName == "D")
                 return GameObject.Find("B");
+            if (upperFaceName == "B")
+                return GameObject.Find("U");
+        }
+
+        if (faceName == "U")
+        {
+            if (upperFaceName == "F")
+                return GameObject.Find("R");
+            if (upperFaceName == "L")
+                return GameObject.Find("F");
+            if (upperFaceName == "B")
+                return GameObject.Find("L");
+            if (upperFaceName == "R")
+                return GameObject.Find("B");
+        }
+
+        if (faceName == "D")
+        {
+            if (upperFaceName == "F")
+                return GameObject.Find("L");
+            if (upperFaceName == "L")
+                return GameObject.Find("B");
+            if (upperFaceName == "B")
+                return GameObject.Find("R");
+            if (upperFaceName == "R")
+                return GameObject.Find("F");
         }
         return null;
     }
 
-    public GameObject RightNeighbourFace(GameObject targetFace, GameObject upperFace)
+    public GameObject RightNeighbourFace_Learning(GameObject targetFace, GameObject upperFace)
     {
-        return OppositeFace(LeftNeighbourFace(targetFace, upperFace));
+        return OppositeFace_Learning(LeftNeighbourFace_Learning(targetFace, upperFace));
     }
 }

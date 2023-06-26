@@ -15,72 +15,26 @@ public class Solve : MonoBehaviour
         cubeMovement = FindObjectOfType<CubeMovement>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public IEnumerator SolveCube()
     {
         if (CubeMovement.moving) yield break;
         CubeMovement.moving = true;
-        /*while (true)
-        {
-            yield return StartCoroutine(cubeMovement.Shuffle());
-            yield return StartCoroutine(GetPieceToUpCross("U F", 7, cubeState.front));
-            yield return StartCoroutine(GetPieceToUpCross("U L", 3, cubeState.left));
-            yield return StartCoroutine(GetPieceToUpCross("U B", 1, cubeState.back));
-            yield return StartCoroutine(GetPieceToUpCross("U R", 5, cubeState.right));
-            if (!WhiteCrossDone())
-            {
-                //yield return StartCoroutine(SolveCube());
-                yield break;
-            }
-            //yield return new WaitForSeconds(5);
-            yield return StartCoroutine(GetPieceToUpCorner("U F R", 8, cubeState.front));
-            yield return StartCoroutine(GetPieceToUpCorner("U F L", 6, cubeState.left));
-            yield return StartCoroutine(GetPieceToUpCorner("U B L", 0, cubeState.back));
-            yield return StartCoroutine(GetPieceToUpCorner("U B R", 2, cubeState.right));
-            if (!FirstLayerDone())
-            {
-                //yield return StartCoroutine(SolveCube());
-                yield break;
-            }
-            yield return StartCoroutine(SolveCube());
-        }*/
-        //yield return new WaitForSeconds(5);
+
+        yield return StartCoroutine(cubeMovement.Shuffle());
         yield return StartCoroutine(GetPieceToUpCross("U F", 7, cubeState.front));
         yield return StartCoroutine(GetPieceToUpCross("U L", 3, cubeState.left));
         yield return StartCoroutine(GetPieceToUpCross("U B", 1, cubeState.back));
         yield return StartCoroutine(GetPieceToUpCross("U R", 5, cubeState.right));
-
         yield return StartCoroutine(GetPieceToUpCorner("U F R", 8, cubeState.front));
         yield return StartCoroutine(GetPieceToUpCorner("U F L", 6, cubeState.left));
         yield return StartCoroutine(GetPieceToUpCorner("U B L", 0, cubeState.back));
         yield return StartCoroutine(GetPieceToUpCorner("U B R", 2, cubeState.right));
-        if (!FirstLayerDone())
-        {
-            //yield return StartCoroutine(SolveCube());
-            yield break;
-        }
+            
         yield return StartCoroutine(SecondLayer());
-        if (!FirstTwoLayersDone())
-        {
-            //yield return StartCoroutine(SolveCube()); 
-            yield break;
-        }
         yield return StartCoroutine(DownCross());
         yield return StartCoroutine(DownCorners());
-        if (!DownCornersDone())
-        {
-            //yield return StartCoroutine(SolveCube()); 
-            yield break;
-        }
-        //CubeMovement.snapSpeed = 200;
-        //yield return new WaitForSeconds(10);
         yield return StartCoroutine(OrientDownCorners());
-        //}*/
+
         CubeMovement.moving = false;
     }
 
@@ -359,8 +313,6 @@ public class Solve : MonoBehaviour
             yield return StartCoroutine(cubeMovement.PerformMove(GetFaceByPosition(targetFacePosition), cubeState.down, "U'"));
             yield return StartCoroutine(cubeMovement.PerformMove(GetFaceByPosition(targetFacePosition), cubeState.down, "F'"));
         }
-        //CubeMovement.snapSpeed = 30;
-        //yield return new WaitForSeconds(20);
         //position it correctly
         while (GetCorrectDownEdges() < 2)
         {
@@ -388,9 +340,9 @@ public class Solve : MonoBehaviour
                 yield return StartCoroutine(SwapDownEdge("Right"));
             }
         }
-        else if (wrongFaces[0].Equals("Front"))
+        else
         {
-            if (wrongFaces[1].Equals("Right"))
+            if (wrongFaces[0].Equals("Front") && wrongFaces[1].Equals("Right"))
             {
                 yield return StartCoroutine(SwapDownEdge("Front"));
             }
@@ -418,7 +370,7 @@ public class Solve : MonoBehaviour
     public List<string> GetWrongDownEdges()
     {
         List<string> wrongFaces = new();
-        if (!cubeState.front[7].name.Equals("Front")) wrongFaces.Add("Front"); 
+        if (!cubeState.front[7].name.Equals("Front")) wrongFaces.Add("Front");
         if (!cubeState.left[7].name.Equals("Left")) wrongFaces.Add("Left");
         if (!cubeState.back[7].name.Equals("Back")) wrongFaces.Add("Back");
         if (!cubeState.right[7].name.Equals("Right")) wrongFaces.Add("Right");
@@ -511,6 +463,7 @@ public class Solve : MonoBehaviour
     public IEnumerator OrientDownCorners()
     {
         List<(string face, int downIndex, string pieceName)> wrongCorners = FindWrongOrientedDownCorner();
+        if (wrongCorners.Count == 0) { yield break; }
         string face = wrongCorners[0].face;
         for (int i = 0;  i < wrongCorners.Count - 1; i++)
         {
@@ -520,9 +473,6 @@ public class Solve : MonoBehaviour
             }
             while (!GetFaceByPosition(face)[6].transform.parent.name.Equals(wrongCorners[i + 1].pieceName))
             {
-                print("side " + GetFaceByPosition(face)[6].transform.parent.name);
-                print("down" + wrongCorners[i + 1].pieceName);
-                //yield return new WaitForSeconds(5);
                 yield return StartCoroutine(cubeMovement.PerformMove(GetFaceByPosition(face), cubeState.down, "U"));
             }
         }

@@ -43,12 +43,6 @@ public class CubeState : MonoBehaviour
         CubeState.started = true;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void ReadState()
     {
         cubeMap = FindObjectOfType<CubeMap>();

@@ -68,7 +68,7 @@ public class WhiteCorners : MonoBehaviour
         {
             move = move[0].ToString();
         }
-        else
+        else if (!move.Contains("2"))
         {
             move += "'";
         }
@@ -108,7 +108,7 @@ public class WhiteCorners : MonoBehaviour
         {
             move = move[0].ToString();
         }
-        else
+        else if (!move.Contains("2"))
         {
             move += "'";
         }
